@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <style>
+        .weather-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .weather-card:hover {
+            transform: translateY(-5px);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <header class="flex flex-col md:flex-row justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-4 md:mb-0">
+                <i class="fas fa-cloud-sun text-blue-500 mr-2"></i>
+                Weather Dashboard
+            </h1>
+            
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="p-2 rounded-full bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-shadow">
+                    <i class="fas fa-moon text-gray-700 dark:text-yellow-400"></i>
+                </button>
+
+                <div class="flex items-center bg-white dark:bg-gray-800 rounded-full p-1 shadow-md">
+                    <button id="celsius-btn" class="temp-unit active px-3 py-1 rounded-full bg-blue-500 text-white transition-colors">°C</button>
+                    <button id="fahrenheit-btn" class="temp-unit px-3 py-1 rounded-full text-gray-700 dark:text-gray-300 transition-colors">°F</button>
+                </div>
+
+                <button id="refresh-btn" class="p-2 rounded-full bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-shadow">
+                    <i class="fas fa-sync-alt text-blue-500"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="mb-8">
+            <div class="relative max-w-xl mx-auto">
+                <input 
+                    type="text" 
+                    id="search-input" 
+                    placeholder="Cari kota (contoh: Jakarta, London, Tokyo)..." 
+                    class="w-full p-4 pl-12 rounded-xl bg-white dark:bg-gray-800 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 dark:text-white transition-colors"
+                >
+                <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                <div id="suggestions" class="absolute w-full mt-1 bg-white dark:bg-gray-800 rounded-xl shadow-lg z-10 hidden max-h-60 overflow-y-auto"></div>
+            </div>
+
+            <div id="favorites" class="flex flex-wrap justify-center gap-2 mt-4">
+            </div>
+        </div>
+
+        <div id="loading" class="flex flex-col justify-center items-center py-12 hidden">
+            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
+            <p class="text-gray-600 dark:text-gray-400">Memuat data cuaca...</p>
+        </div>
+
+        <div id="current-weather" class="weather-card bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl shadow-xl p-6 mb-8 text-white hidden fade-in">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-center md:text-left mb-6 md:mb-0">
+                    <h2 id="location" class="text-2xl font-bold">Jakarta, ID</h2>
+                    <p id="timestamp" class="text-blue-100">Senin, 1 Januari 2023 12:00</p>
+                    <div class="flex items-center justify-center md:justify-start mt-4">
+                        <img id="weather-icon" src="" alt="Weather Icon" class="w-16 h-16">
+                        <div>
+                            <p id="weather-condition" class="text-xl capitalize">Cerah</p>
+                            <p id="temperature" class="text-5xl font-bold">28°C</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="text-center">
+                        <i class="fas fa-tint text-2xl mb-2"></i>
+                        <p class="text-sm">Kelembaban</p>
+                        <p id="humidity" class="text-xl font-bold">65%</p>
+                    </div>
+                    <div class="text-center">
+                        <i class="fas fa-wind text-2xl mb-2"></i>
+                        <p class="text-sm">Kecepatan Angin</p>
+                        <p id="wind-speed" class="text-xl font-bold">5.2 km/jam</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="forecast" class="mb-8 hidden fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Prakiraan 5 Hari</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            </div>
+        </div>
+
+        <div id="error-message" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl text-center hidden">
+            <p>Terjadi kesalahan saat mengambil data cuaca. Silakan coba lagi.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
